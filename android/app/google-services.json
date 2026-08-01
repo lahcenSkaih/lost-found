@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27959974341",
+    "project_id": "tah-lya",
+    "storage_bucket": "tah-lya.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27959974341:android:d93d5f401260409f3153ac",
+        "android_client_info": {
+          "package_name": "com.example.lost_found"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy541FS9TzEfEhlqbPvLXV3598LYLOM5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
