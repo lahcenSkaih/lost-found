@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import '../controllers/map_controller.dart';
 

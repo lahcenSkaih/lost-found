@@ -24,16 +24,11 @@ class MapPageController extends GetxController {
     final city = _authService.currentUser.value?.city ?? '';
     items.value = await _itemRepo.getItemsByCityAndCategory(city: city);
     markers.value = items.value
-        .map(
-          (item) => Marker(
-            markerId: MarkerId(item.id),
-            position: LatLng(item.latitude, item.longitude),
-            infoWindow: InfoWindow(
-              title: item.category.label,
-              snippet: item.placeDescription,
-            ),
-          ),
-        )
+        .map((item) => Marker(
+              markerId: MarkerId(item.id),
+              position: LatLng(item.latitude, item.longitude),
+              infoWindow: InfoWindow(title: item.category.label, snippet: item.placeDescription),
+            ))
         .toSet();
   }
 }

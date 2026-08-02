@@ -17,12 +17,7 @@ class FilterBar extends GetView<HomeController> {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
-            _chip(
-              context,
-              label: 'All',
-              isSelected: selected == null,
-              onTap: () => controller.setCategory(null),
-            ),
+            _chip(context, label: 'All', isSelected: selected == null, onTap: () => controller.setCategory(null)),
             ...ItemCategory.values.map(
               (c) => _chip(
                 context,
@@ -37,12 +32,7 @@ class FilterBar extends GetView<HomeController> {
     });
   }
 
-  Widget _chip(
-    BuildContext context, {
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
+  Widget _chip(BuildContext context, {required String label, required bool isSelected, required VoidCallback onTap}) {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: ChoiceChip(
@@ -50,9 +40,7 @@ class FilterBar extends GetView<HomeController> {
         selected: isSelected,
         onSelected: (_) => onTap(),
         selectedColor: AppColors.primary,
-        labelStyle: TextStyle(
-          color: isSelected ? Colors.white : AppColors.textPrimary,
-        ),
+        labelStyle: TextStyle(color: isSelected ? Colors.white : AppColors.textPrimary),
       ),
     );
   }

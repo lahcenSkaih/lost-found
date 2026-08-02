@@ -17,10 +17,7 @@ class OtpView extends GetView<OtpController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Enter the 6-digit code we sent you',
-              style: AppTextStyles.heading2,
-            ),
+            Text('Enter the 6-digit code we sent you', style: AppTextStyles.heading2),
             const SizedBox(height: 20),
             CustomTextField(
               label: 'Verification code',
@@ -29,8 +26,7 @@ class OtpView extends GetView<OtpController> {
             ),
             const SizedBox(height: 20),
             Obx(() {
-              if (controller.errorMessage.value == null)
-                return const SizedBox.shrink();
+              if (controller.errorMessage.value == null) return const SizedBox.shrink();
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
@@ -39,13 +35,11 @@ class OtpView extends GetView<OtpController> {
                 ),
               );
             }),
-            Obx(
-              () => CustomButton(
-                label: 'Verify & continue',
-                isLoading: controller.isLoading.value,
-                onPressed: controller.verifyOtp,
-              ),
-            ),
+            Obx(() => CustomButton(
+                  label: 'Verify & continue',
+                  isLoading: controller.isLoading.value,
+                  onPressed: controller.verifyOtp,
+                )),
           ],
         ),
       ),

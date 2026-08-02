@@ -36,9 +36,7 @@ class HomeView extends GetView<HomeController> {
               child: Obx(() {
                 if (controller.isLoading.value) return const LoadingIndicator();
                 if (controller.items.isEmpty) {
-                  return const Center(
-                    child: Text('No items reported nearby yet.'),
-                  );
+                  return const Center(child: Text('No items reported nearby yet.'));
                 }
                 return ListView.separated(
                   padding: const EdgeInsets.all(16),
@@ -48,8 +46,7 @@ class HomeView extends GetView<HomeController> {
                     final item = controller.items[index];
                     return ItemCard(
                       item: item,
-                      onTap: () =>
-                          Get.toNamed(AppRoutes.itemDetail, arguments: item),
+                      onTap: () => Get.toNamed(AppRoutes.itemDetail, arguments: item),
                     );
                   },
                 );
