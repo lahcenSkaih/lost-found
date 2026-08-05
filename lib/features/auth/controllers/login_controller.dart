@@ -27,14 +27,20 @@ class LoginController extends GetxController {
       phoneNumber: phoneController.text.trim(),
       onCodeSent: (verificationId) {
         isLoading.value = false;
-        Get.toNamed(AppRoutes.otp, arguments: {
-          'name': nameController.text.trim(),
-          'city': cityController.text.trim(),
-        });
+        Get.toNamed(
+          AppRoutes.otp,
+          arguments: {
+            'name': nameController.text.trim(),
+            'city': cityController.text.trim(),
+          },
+        );
       },
       onError: (error) {
         isLoading.value = false;
-        errorMessage.value = error;
+        // errorMessage.value = error;
+        debugPrint('Error sending OTP: $error');
+        errorMessage.value =
+            "Something broken on the server, please try again later.";
       },
     );
   }
