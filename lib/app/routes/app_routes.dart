@@ -9,4 +9,5 @@ abstract class AppRoutes {
   static const claim = '/claim';
   static const chat = '/chat';
   static const profile = '/profile';
+  static const splash = '/splash';
 }

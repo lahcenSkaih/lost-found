@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:lost_found/features/profile/bindings/profile_binding.dart';
+import 'package:lost_found/features/profile/views/profile_view.dart';
+import 'package:lost_found/features/splash/binding/splash_binding.dart';
+import 'package:lost_found/features/splash/view/splash_view.dart';
 import 'app_routes.dart';
 import '../../features/auth/bindings/auth_binding.dart';
 import '../../features/auth/views/login_view.dart';
@@ -15,8 +19,6 @@ import '../../features/claim/bindings/claim_binding.dart';
 import '../../features/claim/views/claim_view.dart';
 import '../../features/chat/bindings/chat_binding.dart';
 import '../../features/chat/views/chat_view.dart';
-import '../../features/profile/bindings/profile_binding.dart';
-import '../../features/profile/views/profile_view.dart';
 
 class AppPages {
   AppPages._();
@@ -42,30 +44,35 @@ class AppPages {
       page: () => const MapView(),
       binding: MapBinding(),
     ),
-    // GetPage(
-    //   name: AppRoutes.postItem,
-    //   page: () => const PostItemView(),
-    //   binding: PostItemBinding(),
-    // ),
-    // GetPage(
-    //   name: AppRoutes.itemDetail,
-    //   page: () => const ItemDetailView(),
-    //   binding: ItemDetailBinding(),
-    // ),
-    // GetPage(
-    //   name: AppRoutes.claim,
-    //   page: () => const ClaimView(),
-    //   binding: ClaimBinding(),
-    // ),
-    // GetPage(
-    //   name: AppRoutes.chat,
-    //   page: () => const ChatView(),
-    //   binding: ChatBinding(),
-    // ),
-    // GetPage(
-    //   name: AppRoutes.profile,
-    //   page: () => const ProfileView(),
-    //   binding: ProfileBinding(),
-    // ),
+    GetPage(
+      name: AppRoutes.postItem,
+      page: () => const PostItemView(),
+      binding: PostItemBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.itemDetail,
+      page: () => const ItemDetailView(),
+      binding: ItemDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.claim,
+      page: () => const ClaimView(),
+      binding: ClaimBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.chat,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
   ];
 }

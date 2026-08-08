@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/user_repository.dart';
@@ -17,13 +18,26 @@ class AuthService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    _firebaseAuth.authStateChanges().listen((user) async {
-      if (user != null) {
-        currentUser.value = await _userRepository.getUser(user.uid);
-      } else {
-        currentUser.value = null;
-      }
-    });
+    // _firebaseAuth.authStateChanges().listen((user) async {
+    //   if (user != null) {
+    //     currentUser.value = await _userRepository.getUser(user.uid);
+    //   } else {
+    //     currentUser.value = null;
+    //   }
+    // });
+  }
+
+  Future<void> checkUserLoginStatus() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+
+    if (user != null) {
+      print("User is signed in with UID: ${user.uid}");
+      Get.offAllNamed("/home"); // Navigate to the home screen
+    } else {
+        Get.offAllNamed("/login"); // Navigate to the login screen
+      // print("No user is signed in.");
+    }
   }
 
   /// Step 1: send an OTP to the given phone number (e.g. "+212600000000").
@@ -50,39 +64,6 @@ class AuthService extends GetxService {
     );
   }
 
-  /// Step 2: confirm the OTP code the user typed in.
-  // Future<void> verifyOtp({
-  //   required String smsCode,
-  //   required String name,
-  //   required String city,
-  // }) async {
-  //   if (_verificationId == null) {
-  //     throw Exception('No verification in progress. Request a new code.');
-  //   }
-  //   final credential = PhoneAuthProvider.credential(
-  //     verificationId: _verificationId!,
-  //     smsCode: smsCode,
-  //   );
-  //   final result = await _firebaseAuth.signInWithCredential(credential);
-  //   final uid = result.user!.uid;
-  //
-  //   // Create the user profile the first time they sign in.
-  //   final existing = await _userRepository.getUser(uid);
-  //   if (existing == null) {
-  //     final newUser = UserModel(
-  //       id: uid,
-  //       name: name,
-  //       phone: result.user!.phoneNumber ?? '',
-  //       city: city,
-  //       rating: 0,
-  //       createdAt: DateTime.now(),
-  //     );
-  //     await _userRepository.createUser(newUser);
-  //     currentUser.value = newUser;
-  //   } else {
-  //     currentUser.value = existing;
-  //   }
-  // }
   Future<void> verifyOtp({
     required String smsCode,
     required String name,

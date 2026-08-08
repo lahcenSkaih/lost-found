@@ -13,7 +13,7 @@ class LostFoundApp extends StatelessWidget {
       title: 'Lost & Found',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.splash,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );
