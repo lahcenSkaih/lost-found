@@ -38,7 +38,7 @@ class OtpController extends GetxController {
       );
       Get.offAllNamed(AppRoutes.home);
     } catch (e) {
-      errorMessage.value = e.toString();
+      errorMessage.value = e.toString().replaceFirst('Exception: ', '');
     } finally {
       isLoading.value = false;
     }

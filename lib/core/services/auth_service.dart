@@ -51,6 +51,38 @@ class AuthService extends GetxService {
   }
 
   /// Step 2: confirm the OTP code the user typed in.
+  // Future<void> verifyOtp({
+  //   required String smsCode,
+  //   required String name,
+  //   required String city,
+  // }) async {
+  //   if (_verificationId == null) {
+  //     throw Exception('No verification in progress. Request a new code.');
+  //   }
+  //   final credential = PhoneAuthProvider.credential(
+  //     verificationId: _verificationId!,
+  //     smsCode: smsCode,
+  //   );
+  //   final result = await _firebaseAuth.signInWithCredential(credential);
+  //   final uid = result.user!.uid;
+  //
+  //   // Create the user profile the first time they sign in.
+  //   final existing = await _userRepository.getUser(uid);
+  //   if (existing == null) {
+  //     final newUser = UserModel(
+  //       id: uid,
+  //       name: name,
+  //       phone: result.user!.phoneNumber ?? '',
+  //       city: city,
+  //       rating: 0,
+  //       createdAt: DateTime.now(),
+  //     );
+  //     await _userRepository.createUser(newUser);
+  //     currentUser.value = newUser;
+  //   } else {
+  //     currentUser.value = existing;
+  //   }
+  // }
   Future<void> verifyOtp({
     required String smsCode,
     required String name,
@@ -59,15 +91,43 @@ class AuthService extends GetxService {
     if (_verificationId == null) {
       throw Exception('No verification in progress. Request a new code.');
     }
+
     final credential = PhoneAuthProvider.credential(
       verificationId: _verificationId!,
       smsCode: smsCode,
     );
-    final result = await _firebaseAuth.signInWithCredential(credential);
-    final uid = result.user!.uid;
 
-    // Create the user profile the first time they sign in.
-    final existing = await _userRepository.getUser(uid);
+    final UserCredential result;
+    try {
+      result = await _firebaseAuth.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-verification-code':
+          throw Exception('Incorrect code. Please check and try again.');
+        case 'session-expired':
+          throw Exception('This code has expired. Request a new one.');
+        default:
+          throw Exception('Verification failed. Please try again.');
+      }
+    }
+
+    final uid = result.user?.uid;
+    if (uid == null) {
+      throw Exception('Sign-in succeeded but no user was returned.');
+    }
+
+    // Retry Firestore reads/writes on transient "unavailable" errors.
+    UserModel? existing;
+    try {
+      existing = await _getUserWithRetry(uid);
+    } catch (e) {
+      // User is authenticated but we couldn't load/create their profile.
+      // Let them retry without forcing a fresh OTP.
+      throw Exception(
+        'Signed in, but could not load your profile. Check your connection and try again.',
+      );
+    }
+
     if (existing == null) {
       final newUser = UserModel(
         id: uid,
@@ -77,10 +137,34 @@ class AuthService extends GetxService {
         rating: 0,
         createdAt: DateTime.now(),
       );
-      await _userRepository.createUser(newUser);
+      await _createUserWithRetry(newUser);
       currentUser.value = newUser;
     } else {
       currentUser.value = existing;
+    }
+  }
+
+  Future<UserModel?> _getUserWithRetry(String uid, {int attempts = 3}) async {
+    for (var i = 0; i < attempts; i++) {
+      try {
+        return await _userRepository.getUser(uid);
+      } on FirebaseException catch (e) {
+        if (e.code != 'unavailable' || i == attempts - 1) rethrow;
+        await Future.delayed(Duration(milliseconds: 500 * (i + 1)));
+      }
+    }
+    return null;
+  }
+
+  Future<void> _createUserWithRetry(UserModel user, {int attempts = 3}) async {
+    for (var i = 0; i < attempts; i++) {
+      try {
+        await _userRepository.createUser(user);
+        return;
+      } on FirebaseException catch (e) {
+        if (e.code != 'unavailable' || i == attempts - 1) rethrow;
+        await Future.delayed(Duration(milliseconds: 500 * (i + 1)));
+      }
     }
   }
 
